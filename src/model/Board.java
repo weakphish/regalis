@@ -43,16 +43,20 @@ public class Board {
         FILE_PAIRS.put("e", 4);
         FILE_PAIRS.put("f", 5);
         FILE_PAIRS.put("g", 6);
-        FILE_PAIRS.put("h", 6);
+        FILE_PAIRS.put("h", 7);
 
         // TODO Init the board
+        // Pawns
         this.board = new int[BOARD_DIMENSIONS][BOARD_DIMENSIONS];
-        for (int i = 0; i < BOARD_DIMENSIONS; i++) {
-            this.board[6][i] = WHITE_PAWN;
+        for (int file = 0; file < BOARD_DIMENSIONS; file++) {
+            this.board[1][file] = WHITE_PAWN;
         }
-        for (int i = 0; i < BOARD_DIMENSIONS; i++) {
-            this.board[1][i] = BLACK_PAWN;
+        for (int file = 0; file < BOARD_DIMENSIONS; file++) {
+            this.board[6][file] = BLACK_PAWN;
         }
+        // White
+        this.board[0][FILE_PAIRS.get("a")] = WHITE_ROOK;
+        this.board[0][FILE_PAIRS.get("h")] = WHITE_ROOK;
     }
 
     /**
