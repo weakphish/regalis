@@ -19,13 +19,13 @@ public class Board {
     private final static int BLACK_KING = -6;
 
     /**
-     * Hashmap that represents the key-value pairs of the ranks letter-to-index
-     */
-    private final static HashMap<String, Integer> RANK_PAIRS = new HashMap<>();
-    /**
      * Dimensions of the square board
      */
-    private final static int BOARD_DIMENSIONS = 8;
+    public final static int BOARD_DIMENSIONS = 8;
+    /**
+     * Hashmap that represents the key-value pairs of the file letter-to-index
+     */
+    private final static HashMap<String, Integer> FILE_PAIRS = new HashMap<>();
     /**
      * A 2D integer array that represents the board state in memory
      */
@@ -36,16 +36,31 @@ public class Board {
      */
     public Board() {
         // Init the Rank hashmap
-        RANK_PAIRS.put("a", 0);
-        RANK_PAIRS.put("b", 1);
-        RANK_PAIRS.put("c", 2);
-        RANK_PAIRS.put("d", 3);
-        RANK_PAIRS.put("e", 4);
-        RANK_PAIRS.put("f", 5);
-        RANK_PAIRS.put("g", 6);
-        RANK_PAIRS.put("h", 6);
+        FILE_PAIRS.put("a", 0);
+        FILE_PAIRS.put("b", 1);
+        FILE_PAIRS.put("c", 2);
+        FILE_PAIRS.put("d", 3);
+        FILE_PAIRS.put("e", 4);
+        FILE_PAIRS.put("f", 5);
+        FILE_PAIRS.put("g", 6);
+        FILE_PAIRS.put("h", 6);
 
-        // Init the board
+        // TODO Init the board
         this.board = new int[BOARD_DIMENSIONS][BOARD_DIMENSIONS];
+        for (int i = 0; i < BOARD_DIMENSIONS; i++) {
+            this.board[6][i] = WHITE_PAWN;
+        }
+        for (int i = 0; i < BOARD_DIMENSIONS; i++) {
+            this.board[1][i] = BLACK_PAWN;
+        }
+    }
+
+    /**
+     * Get the board
+     *
+     * @return the board array
+     */
+    public int[][] getBoard() {
+        return this.board;
     }
 }
