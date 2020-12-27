@@ -57,6 +57,21 @@ public class Board {
         // White
         this.board[0][FILE_PAIRS.get("a")] = WHITE_ROOK;
         this.board[0][FILE_PAIRS.get("h")] = WHITE_ROOK;
+        this.board[0][FILE_PAIRS.get("b")] = WHITE_KNIGHT;
+        this.board[0][FILE_PAIRS.get("g")] = WHITE_KNIGHT;
+        this.board[0][FILE_PAIRS.get("c")] = WHITE_BISHOP;
+        this.board[0][FILE_PAIRS.get("f")] = WHITE_BISHOP;
+        this.board[0][FILE_PAIRS.get("d")] = WHITE_QUEEN;
+        this.board[0][FILE_PAIRS.get("e")] = WHITE_KING;
+        // Black
+        this.board[7][FILE_PAIRS.get("a")] = BLACK_ROOK;
+        this.board[7][FILE_PAIRS.get("h")] = BLACK_ROOK;
+        this.board[7][FILE_PAIRS.get("b")] = BLACK_KNIGHT;
+        this.board[7][FILE_PAIRS.get("g")] = BLACK_KNIGHT;
+        this.board[7][FILE_PAIRS.get("c")] = BLACK_BISHOP;
+        this.board[7][FILE_PAIRS.get("f")] = BLACK_BISHOP;
+        this.board[7][FILE_PAIRS.get("d")] = BLACK_QUEEN;
+        this.board[7][FILE_PAIRS.get("e")] = BLACK_KING;
     }
 
     /**
