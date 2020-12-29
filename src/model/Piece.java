@@ -14,3 +14,5 @@ public enum Piece {
     BLACK_QUEEN,
     BLACK_KING
 }
+
+

@@ -20,4 +20,11 @@ public class Game {
         this.board = new Board();
         this.turn = 0;
     }
+
+    /**
+     * Print the board - wrapper around the Board method printBoard()
+     */
+    public void printBoard() {
+        this.board.printBoard();
+    }
 }

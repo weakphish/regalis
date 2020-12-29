@@ -12,6 +12,10 @@ public class Board {
      */
     private final static HashMap<String, Integer> FILE_PAIRS = new HashMap<>();
     /**
+     * Hashmap used to pair Pieces with a character for terminal representation
+     */
+    private final static HashMap<Piece, Character> PIECE_CHARS = new HashMap<>();
+    /**
      * A 2D integer array that represents the board state in memory
      */
     private final Piece[][] board;
@@ -30,7 +34,20 @@ public class Board {
         FILE_PAIRS.put("g", 6);
         FILE_PAIRS.put("h", 7);
 
-        // TODO Init the board
+        // Init piece characters
+        PIECE_CHARS.put(Piece.WHITE_PAWN, 'p');
+        PIECE_CHARS.put(Piece.WHITE_KNIGHT, 'n');
+        PIECE_CHARS.put(Piece.WHITE_BISHOP, 'b');
+        PIECE_CHARS.put(Piece.WHITE_ROOK, 'r');
+        PIECE_CHARS.put(Piece.WHITE_QUEEN, 'q');
+        PIECE_CHARS.put(Piece.WHITE_KING, 'k');
+        PIECE_CHARS.put(Piece.BLACK_PAWN, 'P');
+        PIECE_CHARS.put(Piece.BLACK_KNIGHT, 'N');
+        PIECE_CHARS.put(Piece.BLACK_BISHOP, 'B');
+        PIECE_CHARS.put(Piece.BLACK_ROOK, 'R');
+        PIECE_CHARS.put(Piece.BLACK_QUEEN, 'Q');
+        PIECE_CHARS.put(Piece.BLACK_KING, 'K');
+
         // Pawns
         this.board = new Piece[BOARD_DIMENSIONS][BOARD_DIMENSIONS];
         for (int file = 0; file < BOARD_DIMENSIONS; file++) {
@@ -66,5 +83,18 @@ public class Board {
      */
     public Piece[][] getBoard() {
         return this.board;
+    }
+
+    /**
+     * Print the board to the console
+     * // TODO print null chars, find way to represent black and white squares
+     */
+    public void printBoard() {
+        for (int rank = 0; rank < 8; rank++) {
+            for (int file = 0; file < 8; file++) {
+                System.out.printf("%4c", Board.PIECE_CHARS.get(this.getBoard()[rank][file]));
+            }
+            System.out.println();
+        }
     }
 }
