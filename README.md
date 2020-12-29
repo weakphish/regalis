@@ -7,7 +7,7 @@ This is a ***work-in-progress*** attempt at writing a chess engine from scratch.
 - Working (slowly, due to holidays) on getting a basic model of a game set up that is playable by two players
 
 ## Roadmap
-
+- Develop an algorithm for finding legal moves
 - Non-terminal GUI
 - Begin developing an actual engine algorithm
 
