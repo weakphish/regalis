@@ -90,8 +90,8 @@ public class Board {
      * // TODO print null chars, find way to represent black and white squares
      */
     public void printBoard() {
-        for (int rank = 0; rank < 8; rank++) {
-            for (int file = 0; file < 8; file++) {
+        for (int rank = 0; rank < BOARD_DIMENSIONS; rank++) {
+            for (int file = 0; file < BOARD_DIMENSIONS; file++) {
                 System.out.printf("%4c", Board.PIECE_CHARS.get(this.getBoard()[rank][file]));
             }
             System.out.println();
