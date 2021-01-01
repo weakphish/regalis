@@ -2,6 +2,10 @@ package model;
 
 import java.util.HashMap;
 
+/**
+ * This class represents a chess board with an enum type for pieces occupying squares. The board itself is modeled as
+ * a 2D array of Pieces.
+ */
 public class Board {
     /**
      * Dimensions of the square board
@@ -35,6 +39,7 @@ public class Board {
         FILE_PAIRS.put("h", 7);
 
         // Init piece characters
+        PIECE_CHARS.put(null, '0');
         PIECE_CHARS.put(Piece.WHITE_PAWN, 'p');
         PIECE_CHARS.put(Piece.WHITE_KNIGHT, 'n');
         PIECE_CHARS.put(Piece.WHITE_BISHOP, 'b');
