@@ -1,3 +1,5 @@
+use std::io;
+
 const BOARD_DIMENSIONS: usize = 8;
 
 /// This structure represents a chess board and associated state.
@@ -51,6 +53,35 @@ impl Game {
         new_game.board.state[7][7] = Piece::BlackRook;
 
         return new_game;
+    }
+
+    /// Main game loop
+    pub fn run_game(&mut self) {
+        let game_over: bool = false;
+        while !game_over {
+            self.print_board();
+            println!();
+
+            // TODO Get input for the current user
+            // -> somehow call engine to make the move
+            let mut user_input = String::new();
+            match self.turn {
+                Turn::WhiteTurn => print!("White move: "),
+                Turn::BlackTurn => print!("Black move: ")
+            };
+            io::stdin().read_line(&mut user_input)
+                .expect("Couldn't read input.");
+             
+            // TODO Parse user input and translate it to a movement
+            // -> Helper function to check legality of parsed move
+
+            // TODO Make user move and update board state and turn, check for check / mate
+            
+            match self.turn {
+                Turn::WhiteTurn => self.turn = Turn::BlackTurn,
+                Turn::BlackTurn => self.turn = Turn::WhiteTurn
+            }
+        }
     }
 
     /// Print the game board to the console
