@@ -1,7 +1,8 @@
-use model::Board;
+use model::Game;
 
 mod model;
 
 fn main() {
-    let board: Board;
+    let game = Game::new();
+    game.print_board();
 }
