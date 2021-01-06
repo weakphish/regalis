@@ -3,6 +3,6 @@ use model::Game;
 mod model;
 
 fn main() {
-    let game = Game::new();
+    let mut game = Game::new();
     game.run_game();
 }
