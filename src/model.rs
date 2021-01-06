@@ -63,20 +63,24 @@ impl Game {
             println!();
 
             // Get input for the current user
-            // -> somehow call engine to make the move
+            // |-> somehow call engine to make the move
             let mut user_input = String::new();
             match self.turn {
                 Turn::WhiteTurn => print!("White move: "),
                 Turn::BlackTurn => print!("Black move: "),
             };
 
-            io::stdout().flush().expect("Could not read input.");
+            // Flush the input here because, for reasons i'm not entirely sure of,
+            // not flushing = printing and taking user input in the wrong order
+            io::stdout()
+                .flush()
+                .expect("Could not read input.");
             io::stdin()
                 .read_line(&mut user_input)
                 .expect("Couldn't read input.");
 
             // Parse user input and translate it to a movement
-            // -> Helper function to check legality of parsed move
+            // |-> Helper function to check legality of parsed move
 
             // Make user move and update board state and turn, check for check / mate
 
