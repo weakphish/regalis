@@ -81,12 +81,42 @@ impl Game {
 
             // Parse user input and translate it to a movement
             // |-> Helper function to check legality of parsed move
+            self.parse_move(&user_input);
 
             // Make user move and update board state and turn, check for check / mate
 
             match self.turn {
                 Turn::WhiteTurn => self.turn = Turn::BlackTurn,
                 Turn::BlackTurn => self.turn = Turn::WhiteTurn,
+            }
+        }
+    }
+    
+    /// Parse a PGN move
+    fn parse_move(&self, user_move_string: &String) {
+        let piece_char = user_move_string.chars().nth(0).unwrap();
+        
+        // this is crude, should be refined
+        match self.turn {
+            Turn::WhiteTurn => {
+                let moving_piece = match piece_char {
+                    'N' => Piece::WhiteKnight,
+                    'B' => Piece::WhiteBishop,
+                    'R' => Piece::WhiteRook,
+                    'Q' => Piece::WhiteQueen,
+                    'K' => Piece::WhiteKing,
+                    _   => Piece::WhitePawn
+                };
+            },
+            Turn::BlackTurn => {
+                let moving_piece = match piece_char {
+                    'N' => Piece::BlackKnight,
+                    'B' => Piece::BlackBishop,
+                    'R' => Piece::BlackRook,
+                    'Q' => Piece::BlackQueen,
+                    'K' => Piece::BlackKing,
+                    _   => Piece::BlackPawn
+                }; 
             }
         }
     }
