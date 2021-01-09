@@ -94,12 +94,13 @@ impl Game {
     
     /// Parse a PGN move
     fn parse_move(&self, user_move_string: &String) {
+        // Find the piece that is attempting to move
+        // Crude implementation, needs to be refined
         let piece_char = user_move_string.chars().nth(0).unwrap();
-        
-        // this is crude, should be refined
+        let moving_piece: Piece;
         match self.turn {
             Turn::WhiteTurn => {
-                let moving_piece = match piece_char {
+                moving_piece = match piece_char {
                     'N' => Piece::WhiteKnight,
                     'B' => Piece::WhiteBishop,
                     'R' => Piece::WhiteRook,
@@ -109,7 +110,7 @@ impl Game {
                 };
             },
             Turn::BlackTurn => {
-                let moving_piece = match piece_char {
+                moving_piece = match piece_char {
                     'N' => Piece::BlackKnight,
                     'B' => Piece::BlackBishop,
                     'R' => Piece::BlackRook,
@@ -119,6 +120,15 @@ impl Game {
                 }; 
             }
         }
+         
+        // Find the moving piece's legal moves
+        // TODO: figure out how to return this data / store it - maybe 2D array?
+        self.find_legal_moves(moving_piece);
+    }
+
+    /// Find the legal moves for a given piece
+    fn find_legal_moves(&self, piece: Piece) {
+        // TODO
     }
 
     /// Print the game board to the console
