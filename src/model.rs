@@ -1,4 +1,5 @@
 use std::io::{self, Write};
+
 /// Standard size of a chess board
 const BOARD_DIMENSIONS: usize = 8;
 
@@ -192,6 +193,21 @@ fn emptyPieceMove(_empty: Piece, _emptyMove: Move) -> bool {
     return false;
 }
 
+=======
+
+const BOARD_DIMENSIONS: usize = 8;
+
+/// This structure represents a chess board and associated state.
+pub struct Board {
+    state: [[Piece; 8]; 8],
+}
+
+/// This struct represents a game of Chess with associated state.
+pub(crate) struct Game {
+    turn: Turn,
+    board: Board,
+}
+
 impl Game {
     /// Create a new game
     pub fn new() -> Game {
@@ -277,6 +293,7 @@ impl Game {
         new_game.board.state[7][7] = Piece {boardRep: 'r', captured: false, firstMove: true, 
                     color: Color::Black, position: Position {x: 0, y: 7}, 
                     isMoveValid: isRookMoveValid};
+      
         return new_game;
     }
 
@@ -321,46 +338,15 @@ impl Game {
     
     /// Parse a PGN move aka: Algebraic notation
     fn parse_move(&self, _user_move_string: &String) {
-        /*
-        // Find the piece that is attempting to move
-        // Crude implementation, needs to be refined
-        let piece_char = user_move_string.chars().nth(0).unwrap();
-        let moving_piece: Piece;
-        match self.turn {
-            Color::White => {
-                moving_piece = match piece_char {
-                    'N' => Piece::WhiteKnight,
-                    'B' => Piece::WhiteBishop,
-                    'R' => Piece::WhiteRook,
-                    'Q' => Piece::WhiteQueen,
-                    'K' => Piece::WhiteKing,
-                    _   => Piece::WhitePawn
-                };
-            },
-            Color::Black => {
-                moving_piece = match piece_char {
-                    'N' => Piece::BlackKnight,
-                    'B' => Piece::BlackBishop,
-                    'R' => Piece::BlackRook,
-                    'Q' => Piece::BlackQueen,
-                    'K' => Piece::BlackKing,
-                        _   => Piece::BlackPawn
-                }; 
-            }
-        }
-         
-        // Find the moving piece's legal moves
-        // TODO: figure out how to return this data / store it - maybe 2D array?
-        self.find_legal_moves(moving_piece);
-        */
-    }
+      // TODO
+  }
+
 
     /// Find the legal moves for a given piece
-    /*
-    fn find_legal_moves(&self, _piece: Piece) {
+    fn find_legal_moves(&self, piece: Piece) {
         // TODO
     }
-    */
+
     /// Print the game board to the console
     pub fn print_board(&self) {
         for rank in 0..BOARD_DIMENSIONS {
@@ -371,3 +357,4 @@ impl Game {
         }
     }
 }
+
