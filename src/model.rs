@@ -193,21 +193,6 @@ fn emptyPieceMove(_empty: Piece, _emptyMove: Move) -> bool {
     return false;
 }
 
-=======
-
-const BOARD_DIMENSIONS: usize = 8;
-
-/// This structure represents a chess board and associated state.
-pub struct Board {
-    state: [[Piece; 8]; 8],
-}
-
-/// This struct represents a game of Chess with associated state.
-pub(crate) struct Game {
-    turn: Turn,
-    board: Board,
-}
-
 impl Game {
     /// Create a new game
     pub fn new() -> Game {
