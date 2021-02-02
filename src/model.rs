@@ -286,7 +286,13 @@ impl Game {
             // move creation later. Be careful to not desync these. A smarter implementation is
             // also possible
             let temp_pos = Position { x: 6, y: file as i8 };
-            let temp_pawn = Piece { boardRep: 'p', captured: false, firstMove: true, color: Color::Black, position: temp_pos, isMoveValid: is_pawn_move_valid };
+            let temp_pawn = Piece { boardRep: 'p',
+                captured: false,
+                firstMove: true,
+                color: Color::Black,
+                position: temp_pos,
+                isMoveValid: is_pawn_move_valid
+            };
             new_game.board.state[6][file] = temp_pawn;
         }
         // Here, we are not going to create the Piece and position on separate lines and will
