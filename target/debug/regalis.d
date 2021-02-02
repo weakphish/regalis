@@ -1,1 +1,1 @@
-/home/jprhyne/myGit/regalis/target/debug/regalis: /home/jprhyne/myGit/regalis/src/main.rs /home/jprhyne/myGit/regalis/src/model.rs
+/home/weakfish/Developer/regalis/target/debug/regalis: /home/weakfish/Developer/regalis/src/main.rs /home/weakfish/Developer/regalis/src/model.rs

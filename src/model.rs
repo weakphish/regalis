@@ -45,7 +45,7 @@ struct Piece {
     isMoveValid: fn (Piece, Move) -> bool,
 }
 
-fn isPawnMoveValid(pawn: Piece, movement: Move) -> bool{
+fn is_pawn_move_valid(pawn: Piece, movement: Move) -> bool{
     if pawn.captured {
         return false;
     }
@@ -72,7 +72,7 @@ fn isPawnMoveValid(pawn: Piece, movement: Move) -> bool{
     return false;
 }
 
-fn isRookMoveValid(rook: Piece, movement: Move) -> bool {
+fn is_rook_move_valid(rook: Piece, movement: Move) -> bool {
     if rook.captured {
         return false;
     }
@@ -91,7 +91,7 @@ fn isRookMoveValid(rook: Piece, movement: Move) -> bool {
     return true;
     }
 
-fn isBishopMoveValid(bishop: Piece, movement: Move) -> bool {
+fn is_bishop_move_valid(bishop: Piece, movement: Move) -> bool {
     if bishop.captured {
         return false;
     }
@@ -111,7 +111,7 @@ fn isBishopMoveValid(bishop: Piece, movement: Move) -> bool {
     return true;
 }
 
-fn isKnightMoveValid(knight: Piece, movement: Move) -> bool {
+fn is_knight_move_valid(knight: Piece, movement: Move) -> bool {
     if knight.captured {
         return false;
     }
@@ -121,21 +121,21 @@ fn isKnightMoveValid(knight: Piece, movement: Move) -> bool {
     }
     let x = movement.start.x - movement.end.x;
     let y = movement.start.y - movement.end.y;
-    let oneNorm = x.abs() + y.abs();
-    let twoNormSquare = x*x + y*y;
+    let one_norm = x.abs() + y.abs();
+    let two_norm_square = x*x + y*y;
     //If the one norm is 3, then moving three spaces
     //the two norm being sqrt(5) means x^2 + y*2 = 5 has solutions
     //x= +/-1, +/-2
     //y= +/-1, +/-2
     //Which are all valid moves
-    if oneNorm == 3 && twoNormSquare == 5 {
+    if one_norm == 3 && two_norm_square == 5 {
         return true;
     } else {
         return false;
     }
 }
 
-fn isQueenMoveValid(queen: Piece, movement: Move) -> bool {
+fn is_queen_move_valid(queen: Piece, movement: Move) -> bool {
     if queen.captured {
         return false;
     }
@@ -168,7 +168,7 @@ fn isQueenMoveValid(queen: Piece, movement: Move) -> bool {
     return false;
 }
 
-fn isKingMoveValid(king: Piece, movement: Move) -> bool {
+fn is_king_move_valid(king: Piece, movement: Move) -> bool {
     
     if king.captured {
         return false;
@@ -189,7 +189,7 @@ fn isKingMoveValid(king: Piece, movement: Move) -> bool {
     return true;
 }
 
-fn emptyPieceMove(_empty: Piece, _emptyMove: Move) -> bool {
+fn empty_piece_move(_empty: Piece, _empty_move: Move) -> bool {
     return false;
 }
 
@@ -203,7 +203,8 @@ impl Game {
                 // next step
                 state: [[ Piece {boardRep: '_', captured: true, firstMove: false, 
                     color: Color::Empty, position: Position {x: -1, y: -1}, 
-                    isMoveValid: emptyPieceMove}; BOARD_DIMENSIONS]; BOARD_DIMENSIONS],
+                    isMoveValid: empty_piece_move
+                }; BOARD_DIMENSIONS]; BOARD_DIMENSIONS],
             },
         };
         // Initialize board state
@@ -213,72 +214,144 @@ impl Game {
             // creates a position the pawn is going to be (not needed for drawing but needed for
             // move creation later. Be careful to not desync these. A smarter implementation is
             // also possible
-            let tempPos = Position {x: 1, y: file as i8};
-            let tempPawn = Piece {boardRep: 'P', captured: false, firstMove: true, color: Color::White, position: tempPos, isMoveValid: isPawnMoveValid};
-            new_game.board.state[1][file] = tempPawn;
+            let temp_pos = Position {x: 1, y: file as i8};
+            let temp_pawn = Piece {boardRep: 'P', captured: false, firstMove: true, color: Color::White, position: temp_pos, isMoveValid: is_pawn_move_valid };
+            new_game.board.state[1][file] = temp_pawn;
         }
         // Here, we are not going to create the Piece and position on separate lines and will
         // follow the creation flow on new_game.state initialization
         new_game.board.state[0][0] = Piece {boardRep: 'R', captured: false, firstMove: true, 
-                    color: Color::White, position: Position {x: 0, y: 0}, 
-                    isMoveValid: isRookMoveValid};
-        new_game.board.state[0][1] = Piece {boardRep: 'N', captured: false, firstMove: true, 
-                    color: Color::White, position: Position {x: 0, y: 1}, 
-                    isMoveValid: isKnightMoveValid};
-        new_game.board.state[0][2] = Piece {boardRep: 'B', captured: false, firstMove: true, 
-                    color: Color::White, position: Position {x: 0, y: 2}, 
-                    isMoveValid: isRookMoveValid};
-        new_game.board.state[0][3] = Piece {boardRep: 'Q', captured: false, firstMove: true, 
-                    color: Color::White, position: Position {x: 0, y: 3}, 
-                    isMoveValid: isQueenMoveValid};
-        new_game.board.state[0][4] = Piece {boardRep: 'K', captured: false, firstMove: true, 
-                    color: Color::White, position: Position {x: 0, y: 4}, 
-                    isMoveValid: isKingMoveValid};
-        new_game.board.state[0][5] = Piece {boardRep: 'B', captured: false, firstMove: true, 
-                    color: Color::White, position: Position {x: 0, y: 5}, 
-                    isMoveValid: isBishopMoveValid};
-        new_game.board.state[0][6] = Piece {boardRep: 'N', captured: false, firstMove: true, 
-                    color: Color::White, position: Position {x: 0, y: 6}, 
-                    isMoveValid: isKnightMoveValid};
-        new_game.board.state[0][7] = Piece {boardRep: 'R', captured: false, firstMove: true, 
-                    color: Color::White, position: Position {x: 0, y: 7}, 
-                    isMoveValid: isRookMoveValid};
+                    color: Color::White, position: Position {x: 0, y: 0},
+            isMoveValid: is_rook_move_valid
+        };
+        new_game.board.state[0][1] = Piece {
+            boardRep: 'N',
+            captured: false,
+            firstMove: true,
+            color: Color::White,
+            position: Position { x: 0, y: 1 },
+            isMoveValid: is_knight_move_valid,
+        };
+        new_game.board.state[0][2] = Piece {
+            boardRep: 'B',
+            captured: false,
+            firstMove: true,
+            color: Color::White,
+            position: Position { x: 0, y: 2 },
+            isMoveValid: is_rook_move_valid,
+        };
+        new_game.board.state[0][3] = Piece {
+            boardRep: 'Q',
+            captured: false,
+            firstMove: true,
+            color: Color::White,
+            position: Position { x: 0, y: 3 },
+            isMoveValid: is_queen_move_valid,
+        };
+        new_game.board.state[0][4] = Piece {
+            boardRep: 'K',
+            captured: false,
+            firstMove: true,
+            color: Color::White,
+            position: Position { x: 0, y: 4 },
+            isMoveValid: is_king_move_valid,
+        };
+        new_game.board.state[0][5] = Piece {
+            boardRep: 'B',
+            captured: false,
+            firstMove: true,
+            color: Color::White,
+            position: Position { x: 0, y: 5 },
+            isMoveValid: is_bishop_move_valid,
+        };
+        new_game.board.state[0][6] = Piece {
+            boardRep: 'N',
+            captured: false,
+            firstMove: true,
+            color: Color::White,
+            position: Position { x: 0, y: 6 },
+            isMoveValid: is_knight_move_valid,
+        };
+        new_game.board.state[0][7] = Piece {
+            boardRep: 'R',
+            captured: false,
+            firstMove: true,
+            color: Color::White,
+            position: Position { x: 0, y: 7 },
+            isMoveValid: is_rook_move_valid,
+        };
 
         for file in 0..BOARD_DIMENSIONS {
             // creates a position the pawn is going to be (not needed for drawing but needed for
             // move creation later. Be careful to not desync these. A smarter implementation is
             // also possible
-            let tempPos = Position {x: 6, y: file as i8};
-            let tempPawn = Piece {boardRep: 'p', captured: false, firstMove: true, color: Color::Black, position: tempPos, isMoveValid: isPawnMoveValid};
-            new_game.board.state[6][file] = tempPawn;
+            let temp_pos = Position { x: 6, y: file as i8 };
+            let temp_pawn = Piece { boardRep: 'p', captured: false, firstMove: true, color: Color::Black, position: temp_pos, isMoveValid: is_pawn_move_valid };
+            new_game.board.state[6][file] = temp_pawn;
         }
         // Here, we are not going to create the Piece and position on separate lines and will
         // follow the creation flow on new_game.state initialization
         new_game.board.state[7][0] = Piece {boardRep: 'r', captured: false, firstMove: true, 
-                    color: Color::Black, position: Position {x: 0, y: 0}, 
-                    isMoveValid: isRookMoveValid};
-        new_game.board.state[7][1] = Piece {boardRep: 'n', captured: false, firstMove: true, 
-                    color: Color::Black, position: Position {x: 0, y: 1}, 
-                    isMoveValid: isKnightMoveValid};
-        new_game.board.state[7][2] = Piece {boardRep: 'b', captured: false, firstMove: true, 
-                    color: Color::Black, position: Position {x: 0, y: 2}, 
-                    isMoveValid: isRookMoveValid};
-        new_game.board.state[7][3] = Piece {boardRep: 'q', captured: false, firstMove: true, 
-                    color: Color::Black, position: Position {x: 0, y: 3}, 
-                    isMoveValid: isQueenMoveValid};
-        new_game.board.state[7][4] = Piece {boardRep: 'k', captured: false, firstMove: true, 
-                    color: Color::Black, position: Position {x: 0, y: 4}, 
-                    isMoveValid: isKingMoveValid};
-        new_game.board.state[7][5] = Piece {boardRep: 'b', captured: false, firstMove: true, 
-                    color: Color::Black, position: Position {x: 0, y: 5}, 
-                    isMoveValid: isBishopMoveValid};
-        new_game.board.state[7][6] = Piece {boardRep: 'n', captured: false, firstMove: true, 
-                    color: Color::Black, position: Position {x: 0, y: 6}, 
-                    isMoveValid: isKnightMoveValid};
-        new_game.board.state[7][7] = Piece {boardRep: 'r', captured: false, firstMove: true, 
-                    color: Color::Black, position: Position {x: 0, y: 7}, 
-                    isMoveValid: isRookMoveValid};
-      
+                    color: Color::Black, position: Position {x: 0, y: 0},
+            isMoveValid: is_rook_move_valid
+        };
+        new_game.board.state[7][1] = Piece {
+            boardRep: 'n',
+            captured: false,
+            firstMove: true,
+            color: Color::Black,
+            position: Position { x: 0, y: 1 },
+            isMoveValid: is_knight_move_valid,
+        };
+        new_game.board.state[7][2] = Piece {
+            boardRep: 'b',
+            captured: false,
+            firstMove: true,
+            color: Color::Black,
+            position: Position { x: 0, y: 2 },
+            isMoveValid: is_rook_move_valid,
+        };
+        new_game.board.state[7][3] = Piece {
+            boardRep: 'q',
+            captured: false,
+            firstMove: true,
+            color: Color::Black,
+            position: Position { x: 0, y: 3 },
+            isMoveValid: is_queen_move_valid,
+        };
+        new_game.board.state[7][4] = Piece {
+            boardRep: 'k',
+            captured: false,
+            firstMove: true,
+            color: Color::Black,
+            position: Position { x: 0, y: 4 },
+            isMoveValid: is_king_move_valid,
+        };
+        new_game.board.state[7][5] = Piece {
+            boardRep: 'b',
+            captured: false,
+            firstMove: true,
+            color: Color::Black,
+            position: Position { x: 0, y: 5 },
+            isMoveValid: is_bishop_move_valid,
+        };
+        new_game.board.state[7][6] = Piece {
+            boardRep: 'n',
+            captured: false,
+            firstMove: true,
+            color: Color::Black,
+            position: Position { x: 0, y: 6 },
+            isMoveValid: is_knight_move_valid,
+        };
+        new_game.board.state[7][7] = Piece {
+            boardRep: 'r',
+            captured: false,
+            firstMove: true,
+            color: Color::Black,
+            position: Position { x: 0, y: 7 },
+            isMoveValid: is_rook_move_valid,
+        };
+
         return new_game;
     }
 
