@@ -5,7 +5,7 @@ const BOARD_DIMENSIONS: usize = 8;
 
 /// This structure represents the drawn chessboard to be updated after each move
 pub struct Board {
-    state:[[Piece; BOARD_DIMENSIONS]; BOARD_DIMENSIONS],
+    state: [[Piece; BOARD_DIMENSIONS]; BOARD_DIMENSIONS],
 }
 
 /// This struct represents a game of Chess along with whoever's turn it is
@@ -19,7 +19,7 @@ pub(crate) struct Game {
 enum Color {
     White,
     Black,
-    Empty, 
+    Empty,
 }
 /// Struct that represents the current position. x,y must be less than BOARD_DIMENSIONS
 #[derive(Copy, Clone)]
@@ -31,21 +31,32 @@ struct Position {
 #[derive(Copy, Clone)]
 struct Move {
     start: Position,
-    end:   Position,
+    end: Position,
 }
 
 /// Creates a structure that represents a chess Piece
 #[derive(Copy, Clone)]
 struct Piece {
-    board_rep:    char,
-    captured:    bool,
-    first_move:   bool,
-    color:       Color,
-    position:    Position,
-    is_move_valid: fn (Piece, Move) -> bool,
+    board_rep: char,
+    piece_type: PieceType,
+    captured: bool,
+    first_move: bool,
+    color: Color,
+    position: Position,
+    is_move_valid: fn(Piece, Move) -> bool,
 }
 
-fn is_pawn_move_valid(pawn: Piece, movement: Move) -> bool{
+pub enum PieceType {
+    Pawn,
+    Knight,
+    Bishop,
+    Rook,
+    King,
+    Queen,
+    None,
+}
+
+fn is_pawn_move_valid(pawn: Piece, movement: Move) -> bool {
     if pawn.captured {
         return false;
     }
@@ -54,17 +65,15 @@ fn is_pawn_move_valid(pawn: Piece, movement: Move) -> bool{
     //Since the "white" player is at the bottom, we flip the value for this check if the piece
     //is black
     match pawn.color {
-        Color::Black => {
-            y = -y
-        }
+        Color::Black => y = -y,
         Color::White => {}
         Color::Empty => {}
     }
     let x = movement.end.x - movement.start.x; //Currently not checking for attack
-    //This checks if the pawn is moving one block forward or two blocks if it's the first move
+                                               //This checks if the pawn is moving one block forward or two blocks if it's the first move
     if ((y == 1) || (y == 2 && pawn.first_move)) && x == 0 {
         return true;
-    } 
+    }
     if movement.end.x >= BOARD_DIMENSIONS as i8 || movement.end.y >= BOARD_DIMENSIONS as i8 {
         //This checks if the piece is trying to move off the board
         return false;
@@ -89,7 +98,7 @@ fn is_rook_move_valid(rook: Piece, movement: Move) -> bool {
     }
     // TODO Check if the Rook is jumping over a piece here
     return true;
-    }
+}
 
 fn is_bishop_move_valid(bishop: Piece, movement: Move) -> bool {
     if bishop.captured {
@@ -99,7 +108,7 @@ fn is_bishop_move_valid(bishop: Piece, movement: Move) -> bool {
         //This checks if the piece is trying to move off the board
         return false;
     }
-    //Can move diagonally across the entire board 
+    //Can move diagonally across the entire board
     let x = movement.end.x - movement.start.x;
     let y = movement.end.y - movement.start.y;
     // A piece is moving diagonally iff it's x movement is equal to it's y movement (ignoring
@@ -122,7 +131,7 @@ fn is_knight_move_valid(knight: Piece, movement: Move) -> bool {
     let x = movement.start.x - movement.end.x;
     let y = movement.start.y - movement.end.y;
     let one_norm = x.abs() + y.abs();
-    let two_norm_square = x*x + y*y;
+    let two_norm_square = x * x + y * y;
     //If the one norm is 3, then moving three spaces
     //the two norm being sqrt(5) means x^2 + y*2 = 5 has solutions
     //x= +/-1, +/-2
@@ -169,7 +178,6 @@ fn is_queen_move_valid(queen: Piece, movement: Move) -> bool {
 }
 
 fn is_king_move_valid(king: Piece, movement: Move) -> bool {
-    
     if king.captured {
         return false;
     }
@@ -201,10 +209,14 @@ impl Game {
             board: Board {
                 // Initializes the state of the board as "empty" pieces to be updated during the
                 // next step
-                state: [[ Piece {
-                    board_rep: '_', captured: true, first_move: false,
-                    color: Color::Empty, position: Position {x: -1, y: -1}, 
-                    is_move_valid: empty_piece_move
+                state: [[Piece {
+                    board_rep: '_',
+                    piece_type: PieceType::None,
+                    captured: true,
+                    first_move: false,
+                    color: Color::Empty,
+                    position: Position { x: -1, y: -1 },
+                    is_move_valid: empty_piece_move,
                 }; BOARD_DIMENSIONS]; BOARD_DIMENSIONS],
             },
         };
@@ -215,19 +227,35 @@ impl Game {
             // creates a position the pawn is going to be (not needed for drawing but needed for
             // move creation later. Be careful to not desync these. A smarter implementation is
             // also possible
-            let temp_pos = Position {x: 1, y: file as i8};
-            let temp_pawn = Piece { board_rep: 'P', captured: false, first_move: true, color: Color::White, position: temp_pos, is_move_valid: is_pawn_move_valid };
+            let temp_pos = Position {
+                x: 1,
+                y: file as i8,
+            };
+            let temp_pawn = Piece {
+                board_rep: 'P',
+                piece_type: PieceType::Pawn,
+                captured: false,
+                first_move: true,
+                color: Color::White,
+                position: temp_pos,
+                is_move_valid: is_pawn_move_valid,
+            };
             new_game.board.state[1][file] = temp_pawn;
         }
         // Here, we are not going to create the Piece and position on separate lines and will
         // follow the creation flow on new_game.state initialization
         new_game.board.state[0][0] = Piece {
-            board_rep: 'R', captured: false, first_move: true,
-                    color: Color::White, position: Position {x: 0, y: 0},
-            is_move_valid: is_rook_move_valid
+            board_rep: 'R',
+            piece_type: PieceType::Rook,
+            captured: false,
+            first_move: true,
+            color: Color::White,
+            position: Position { x: 0, y: 0 },
+            is_move_valid: is_rook_move_valid,
         };
         new_game.board.state[0][1] = Piece {
             board_rep: 'N',
+            piece_type: PieceType::Knight,
             captured: false,
             first_move: true,
             color: Color::White,
@@ -236,6 +264,7 @@ impl Game {
         };
         new_game.board.state[0][2] = Piece {
             board_rep: 'B',
+            piece_type: PieceType::Bishop,
             captured: false,
             first_move: true,
             color: Color::White,
@@ -244,6 +273,7 @@ impl Game {
         };
         new_game.board.state[0][3] = Piece {
             board_rep: 'Q',
+            piece_type: PieceType::Queen,
             captured: false,
             first_move: true,
             color: Color::White,
@@ -252,6 +282,7 @@ impl Game {
         };
         new_game.board.state[0][4] = Piece {
             board_rep: 'K',
+            piece_type: PieceType::King,
             captured: false,
             first_move: true,
             color: Color::White,
@@ -260,6 +291,7 @@ impl Game {
         };
         new_game.board.state[0][5] = Piece {
             board_rep: 'B',
+            piece_type: PieceType::Bishop,
             captured: false,
             first_move: true,
             color: Color::White,
@@ -268,6 +300,7 @@ impl Game {
         };
         new_game.board.state[0][6] = Piece {
             board_rep: 'N',
+            piece_type: PieceType::Knight,
             captured: false,
             first_move: true,
             color: Color::White,
@@ -276,6 +309,7 @@ impl Game {
         };
         new_game.board.state[0][7] = Piece {
             board_rep: 'R',
+            piece_type: PieceType::Rook,
             captured: false,
             first_move: true,
             color: Color::White,
@@ -287,25 +321,35 @@ impl Game {
             // creates a position the pawn is going to be (not needed for drawing but needed for
             // move creation later. Be careful to not desync these. A smarter implementation is
             // also possible
-            let temp_pos = Position { x: 6, y: file as i8 };
-            let temp_pawn = Piece { board_rep: 'p',
+            let temp_pos = Position {
+                x: 6,
+                y: file as i8,
+            };
+            let temp_pawn = Piece {
+                board_rep: 'p',
+                piece_type: PieceType::Pawn,
                 captured: false,
                 first_move: true,
                 color: Color::Black,
                 position: temp_pos,
-                is_move_valid: is_pawn_move_valid
+                is_move_valid: is_pawn_move_valid,
             };
             new_game.board.state[6][file] = temp_pawn;
         }
         // Here, we are not going to create the Piece and position on separate lines and will
         // follow the creation flow on new_game.state initialization
         new_game.board.state[7][0] = Piece {
-            board_rep: 'r', captured: false, first_move: true,
-                    color: Color::Black, position: Position {x: 0, y: 0},
-            is_move_valid: is_rook_move_valid
+            board_rep: 'r',
+            piece_type: PieceType::Rook,
+            captured: false,
+            first_move: true,
+            color: Color::Black,
+            position: Position { x: 0, y: 0 },
+            is_move_valid: is_rook_move_valid,
         };
         new_game.board.state[7][1] = Piece {
             board_rep: 'n',
+            piece_type: PieceType::Knight,
             captured: false,
             first_move: true,
             color: Color::Black,
@@ -314,6 +358,7 @@ impl Game {
         };
         new_game.board.state[7][2] = Piece {
             board_rep: 'b',
+            piece_type: PieceType::Bishop,
             captured: false,
             first_move: true,
             color: Color::Black,
@@ -322,6 +367,7 @@ impl Game {
         };
         new_game.board.state[7][3] = Piece {
             board_rep: 'q',
+            piece_type: PieceType::Queen,
             captured: false,
             first_move: true,
             color: Color::Black,
@@ -330,6 +376,7 @@ impl Game {
         };
         new_game.board.state[7][4] = Piece {
             board_rep: 'k',
+            piece_type: PieceType::King,
             captured: false,
             first_move: true,
             color: Color::Black,
@@ -338,6 +385,7 @@ impl Game {
         };
         new_game.board.state[7][5] = Piece {
             board_rep: 'b',
+            piece_type: PieceType::Bishop,
             captured: false,
             first_move: true,
             color: Color::Black,
@@ -346,6 +394,7 @@ impl Game {
         };
         new_game.board.state[7][6] = Piece {
             board_rep: 'n',
+            piece_type: PieceType::Knight,
             captured: false,
             first_move: true,
             color: Color::Black,
@@ -354,6 +403,7 @@ impl Game {
         };
         new_game.board.state[7][7] = Piece {
             board_rep: 'r',
+            piece_type: PieceType::Rook,
             captured: false,
             first_move: true,
             color: Color::Black,
@@ -377,14 +427,12 @@ impl Game {
             match self.turn {
                 Color::White => print!("White move: "),
                 Color::Black => print!("Black move: "),
-                Color::Empty => print!("Should never happen, file a bug report for \"Empty turn\"")
+                Color::Empty => print!("Should never happen, file a bug report for \"Empty turn\""),
             };
 
             // Flush the input here because, for reasons i'm not entirely sure of,
             // not flushing = printing and taking user input in the wrong order
-            io::stdout()
-                .flush()
-                .expect("Could not read input.");
+            io::stdout().flush().expect("Could not read input.");
             io::stdin()
                 .read_line(&mut user_input)
                 .expect("Couldn't read input.");
@@ -394,7 +442,6 @@ impl Game {
             self.parse_move(&user_input);
 
             // Make user move and update board state and turn, check for check / mate
-
             match self.turn {
                 Color::White => self.turn = Color::Black,
                 Color::Black => self.turn = Color::White,
@@ -402,12 +449,27 @@ impl Game {
             }
         }
     }
-    
-    /// Parse a PGN move aka: Algebraic notation
-    fn parse_move(&self, _user_move_string: &String) {
-      // TODO
-  }
 
+    /// Parse a PGN move aka: Algebraic notation
+    fn parse_move(&self, mut user_move_string: &String) {
+        let color = self.turn;
+
+        let moving_piece_str = user_move_string.chars().rev().nth(0);
+        let piece_type: PieceType = match moving_piece_str {
+            "p" => PieceType::Pawn,
+            "P" => PieceType::Pawn,
+            "r" => PieceType::Rook,
+            "R" => PieceType::Rook,
+            "n" => PieceType::Knight,
+            "B" => PieceType::Bishop,
+            "b" => PieceType::Bishop,
+            "k" => PieceType::King,
+            "K" => PieceType::King,
+            "Q" => PieceType::Queen,
+            "q" => PieceType::Queen,
+            _ => PieceType::None,
+        };
+    }
 
     /// Find the legal moves for a given piece
     fn find_legal_moves(&self, piece: Piece) {
@@ -424,4 +486,3 @@ impl Game {
         }
     }
 }
-
