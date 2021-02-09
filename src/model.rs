@@ -454,19 +454,20 @@ impl Game {
     fn parse_move(&self, mut user_move_string: &String) {
         let color = self.turn;
 
-        let moving_piece_str = user_move_string.chars().rev().nth(0);
+        let moving_piece_str = user_move_string.chars().rev().nth(0).unwrap();
+        // need the unwrap to allow for a single match rather than a nested
         let piece_type: PieceType = match moving_piece_str {
-            "p" => PieceType::Pawn,
-            "P" => PieceType::Pawn,
-            "r" => PieceType::Rook,
-            "R" => PieceType::Rook,
-            "n" => PieceType::Knight,
-            "B" => PieceType::Bishop,
-            "b" => PieceType::Bishop,
-            "k" => PieceType::King,
-            "K" => PieceType::King,
-            "Q" => PieceType::Queen,
-            "q" => PieceType::Queen,
+            'p' => PieceType::Pawn,
+            'P' => PieceType::Pawn,
+            'r' => PieceType::Rook,
+            'R' => PieceType::Rook,
+            'n' => PieceType::Knight,
+            'B' => PieceType::Bishop,
+            'b' => PieceType::Bishop,
+            'k' => PieceType::King,
+            'K' => PieceType::King,
+            'Q' => PieceType::Queen,
+            'q' => PieceType::Queen,
             _ => PieceType::None,
         };
     }
